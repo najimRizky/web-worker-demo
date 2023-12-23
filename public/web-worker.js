@@ -14,5 +14,5 @@ function longLoop(length) {
     i++;
   }
 
-  return 'Finish Long Loop';
+  return 'Long loop finished';
 }

@@ -3,26 +3,28 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import reactLogo from './assets/react.svg';
 
-const LOOP_LENGTH = 1000000;
+const INITIAL_LENGTH = 100;
 
 function App() {
+  const [loopSize, setLoopSize] = useState(INITIAL_LENGTH)
   const [message, setMessage] = useState()
   const [status, setStatus] = useState()
-  const [worker] = useState(new Worker("web-worker.js"))
 
-  const start = async (type) => {
+  const start = (type) => {
     setMessage("Running long loop...");
     if (type === "web-worker") {
-      worker.postMessage(LOOP_LENGTH);
+      const worker = new Worker("web-worker.js");
+      worker.postMessage(loopSize);
       worker.onmessage = (e) => {
         setMessage(e.data);
+        setStatus(undefined);
+        worker.terminate();
       }
-      worker.terminate();
     } else {
-      const result = longLoop(LOOP_LENGTH);
+      const result = longLoop(loopSize);
       setMessage(result);
+      setStatus(undefined);
     }
-    setStatus();
   };
 
   function longLoop(length) {
@@ -34,6 +36,8 @@ function App() {
       console.log(num);
       i++;
     }
+
+    return "Long loop finished"
   }
 
   const changeBgColor = () => {
@@ -42,9 +46,11 @@ function App() {
   }
 
   useEffect(() => {
+    let rotateDeg = 0;
     setInterval(() => {
-      document.querySelector("#logo").classList.toggle("blink");
-    }, 100);
+      document.querySelector(".logo.react").style.transform = `rotate(${rotateDeg}deg)`;
+      rotateDeg += 1;
+    }, 10);
   }, [])
 
   return (
@@ -57,11 +63,14 @@ function App() {
       <div style={{ marginBottom: "1rem" }}>
         {message}
       </div>
+      <div style={{marginBottom: "1rem"}}>
+        <input type="number" value={loopSize} onChange={(e) => setLoopSize(e.target.value)} />
+      </div>
       <button onClick={changeBgColor} style={{ marginBottom: "1rem" }}>
         Change Background Color
       </button>
 
-      <div style={{ display: "flex", columnGap: "1rem" }}>
+      <div style={{ display: "flex", columnGap: "1rem", justifyContent: "center" }}>
         {message ? (
           <button onClick={() => setMessage("")}>Reset</button>
         ) : (
