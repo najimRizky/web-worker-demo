@@ -4,6 +4,7 @@ import './App.css';
 import reactLogo from './assets/react.svg';
 
 const INITIAL_LENGTH = 100;
+const worker = new Worker("web-worker.js");
 
 function App() {
   const [loopSize, setLoopSize] = useState(INITIAL_LENGTH)
@@ -13,12 +14,10 @@ function App() {
   const start = (type) => {
     setMessage("Running long loop...");
     if (type === "web-worker") {
-      const worker = new Worker("web-worker.js");
       worker.postMessage(loopSize);
       worker.onmessage = (e) => {
         setMessage(e.data);
         setStatus(undefined);
-        worker.terminate();
       }
     } else {
       const result = longLoop(loopSize);
