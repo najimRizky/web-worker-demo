@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import reactLogo from './../assets/react.svg';
 
 const INITIAL_LENGTH = 1000000;
-const worker = new Worker("web-worker.js");
+const loopWorker = new Worker("loop-worker.js");
 
 function Home() {
   const [loopSize, setLoopSize] = useState(INITIAL_LENGTH)
@@ -13,8 +13,8 @@ function Home() {
   const start = (type) => {
     setMessage("Running long loop...");
     if (type === "web-worker") {
-      worker.postMessage(loopSize);
-      worker.onmessage = (e) => {
+      loopWorker.postMessage(loopSize);
+      loopWorker.onmessage = (e) => {
         setMessage(e.data);
         setStatus(undefined);
       }
@@ -51,7 +51,6 @@ function Home() {
     }, 10);
 
     return () => {
-      // worker.terminate();
       clearInterval(interval);
     }
   }, [])
