@@ -1,11 +1,11 @@
-import { RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
 import Layout from './components/Layout.jsx';
 
 const App = () => {
-  const router = createMemoryRouter([
+  const router = createBrowserRouter([
     {
       path: '/',
       element: <Layout />,
