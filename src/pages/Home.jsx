@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import reactLogo from './../assets/react.svg';
 
-const INITIAL_LENGTH = 1;
+const INITIAL_LENGTH = 1000000;
 const worker = new Worker("web-worker.js");
 
 function Home() {
@@ -66,7 +66,8 @@ function Home() {
       <div style={{ marginBottom: "1rem" }}>
         {message}
       </div>
-      <div style={{marginBottom: "1rem"}}>
+      <div style={{ marginBottom: "1rem" }}>
+        <label style={{ display: "block" }}>Loop size: </label>
         <input type="number" value={loopSize} onChange={(e) => setLoopSize(e.target.value)} />
       </div>
       <button onClick={changeBgColor} style={{ marginBottom: "1rem" }}>
