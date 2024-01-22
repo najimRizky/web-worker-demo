@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import reactLogo from './../assets/react.svg';
 
 const INITIAL_LENGTH = 1000000;
-const loopWorker = new Worker("loop-worker.js");
 
 function Home() {
+  const [loopWorker] = useState(new Worker("loop-worker.js"));
   const [loopSize, setLoopSize] = useState(INITIAL_LENGTH)
   const [status, setStatus] = useState("IDLE") // IDLE, RUNNING, FINISHED
 
@@ -27,7 +27,7 @@ function Home() {
   function localLongLoop(length) {
     const arr = [];
     let i = 0;
-    
+
     while (i < length) {
       let num = Math.floor(Math.random() * 10000);
       arr.push(num);
@@ -51,6 +51,7 @@ function Home() {
     }, 10);
 
     return () => {
+      loopWorker.terminate();
       clearInterval(interval);
     }
   }, [])
