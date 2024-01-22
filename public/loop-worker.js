@@ -7,6 +7,7 @@ onmessage = function (e) {
 function WorkerLongLoop(length) {
   const arr = [];
   let i = 0;
+  
   while (i < length) {
     let num = Math.floor(Math.random() * 10000);
     arr.push(num);
@@ -14,5 +15,5 @@ function WorkerLongLoop(length) {
     i++;
   }
 
-  return 'Long loop finished';
+  return true;
 }

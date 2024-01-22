@@ -7,27 +7,27 @@ const loopWorker = new Worker("loop-worker.js");
 
 function Home() {
   const [loopSize, setLoopSize] = useState(INITIAL_LENGTH)
-  const [message, setMessage] = useState()
-  const [status, setStatus] = useState()
+  const [status, setStatus] = useState("IDLE") // IDLE, RUNNING, FINISHED
 
   const start = (type) => {
-    setMessage("Running long loop...");
+    setStatus("RUNNING");
     if (type === "web-worker") {
       loopWorker.postMessage(loopSize);
       loopWorker.onmessage = (e) => {
-        setMessage(e.data);
-        setStatus(undefined);
+        console.log(e.data);
+        setStatus("FINISHED");
       }
     } else {
-      const result = localLongLoop(loopSize);
-      setMessage(result);
-      setStatus(undefined);
+      const result = localLongLoop(loopSize); 
+      console.log(result);
+      setStatus("FINISHED");
     }
   };
 
   function localLongLoop(length) {
     const arr = [];
     let i = 0;
+    
     while (i < length) {
       let num = Math.floor(Math.random() * 10000);
       arr.push(num);
@@ -35,7 +35,7 @@ function Home() {
       i++;
     }
 
-    return "Long loop finished"
+    return true;
   }
 
   const changeBgColor = () => {
@@ -58,32 +58,33 @@ function Home() {
   return (
     <>
       <div id="logo">
-        <a>
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <img src={reactLogo} className="logo react" alt="React logo" />
       </div>
-      <div style={{ marginBottom: "1rem" }}>
-        {message}
-      </div>
+
       <div style={{ marginBottom: "1rem" }}>
         <label style={{ display: "block" }}>Loop size: </label>
         <input type="number" value={loopSize} onChange={(e) => setLoopSize(e.target.value)} />
       </div>
+
       <button onClick={changeBgColor} style={{ marginBottom: "1rem" }}>
         Change Background Color
       </button>
 
-      <div style={{ display: "flex", columnGap: "1rem", justifyContent: "center" }}>
-        {message ? (
-          <button onClick={() => setMessage("")}>Reset</button>
-        ) : (
-          <>
-            {status && <span>{status}</span>}
+      {status === "IDLE" ? (
+        <>
+          <div style={{ display: "flex", columnGap: "1rem", justifyContent: "center" }}>
             <button onClick={() => start("web-worker")}>Long loop with worker</button>
             <button onClick={() => start("normal")}>Long loop without worker</button>
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      ) : status === "RUNNING" ? (
+        <p>Running long loop...</p>
+      ) : status === "FINISHED" && (
+        <>
+          <p style={{marginTop: 0}}>Finished long loop!</p>
+          <button onClick={() => setStatus("IDLE")}>Reset!</button>
+        </>
+      )}
     </>
   );
 }
