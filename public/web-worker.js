@@ -1,10 +1,10 @@
 onmessage = function (e) {
   const { data } = e
-  const result = longLoop(data);
+  const result = WorkerLongLoop(data);
   postMessage(result);
 }
 
-function longLoop(length) {
+function WorkerLongLoop(length) {
   const arr = [];
   let i = 0;
   while (i < length) {

@@ -19,13 +19,13 @@ function Home() {
         setStatus(undefined);
       }
     } else {
-      const result = longLoop(loopSize);
+      const result = localLongLoop(loopSize);
       setMessage(result);
       setStatus(undefined);
     }
   };
 
-  function longLoop(length) {
+  function localLongLoop(length) {
     const arr = [];
     let i = 0;
     while (i < length) {
