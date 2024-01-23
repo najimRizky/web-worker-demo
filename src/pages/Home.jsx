@@ -47,8 +47,8 @@ function Home() {
     let rotateDeg = 0;
     const interval = setInterval(() => {
       document.querySelector(".logo.react").style.transform = `rotate(${rotateDeg}deg)`;
-      rotateDeg += 1;
-    }, 10);
+      rotateDeg += 100;
+    }, 500);
 
     return () => {
       loopWorker.terminate();
@@ -59,7 +59,7 @@ function Home() {
   return (
     <>
       <div id="logo">
-        <img src={reactLogo} className="logo react" alt="React logo" />
+        <img src={reactLogo} style={{transition: "0.5s linear"}} className="logo react" alt="React logo" />
       </div>
 
       <div style={{ marginBottom: "1rem" }}>
